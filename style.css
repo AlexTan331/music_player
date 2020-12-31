@@ -124,14 +124,14 @@ h3 {
   cursor: pointer;
 }
 
-.fa-random::before {
+#random {
   font-size: 30px;
   color: rgb(129, 129, 129);
   user-select: none;
   margin-left: 20px;
 }
 
-.fa-volume-up::before {
+#volume {
   font-size: 30px;
   color: rgb(129, 129, 129);
   user-select: none;

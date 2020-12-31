@@ -55,6 +55,7 @@ const songs = [
   },
 ];
 
+let isRandom = false;
 let isPlaying = false;
 let isPrevPlaying;
 
@@ -89,20 +90,28 @@ function loadSong(song) {
 }
 
 function next() {
-  currentSongidx = (currentSongidx + 1) % songs.length;
-  localStorage.setItem("currentSongIndex", currentSongidx);
-  loadSong(songs[currentSongidx]);
-  playMusic();
+  if (isRandom) {
+    randomPlay();
+  } else {
+    currentSongidx = (currentSongidx + 1) % songs.length;
+    localStorage.setItem("currentSongIndex", currentSongidx);
+    loadSong(songs[currentSongidx]);
+    playMusic();
+  }
 }
 
 function previous() {
-  currentSongidx =
-    currentSongidx <= 0
-      ? (currentSongidx = songs.length - 1)
-      : (currentSongidx - 1) % songs.length;
-  localStorage.setItem("currentSongIndex", currentSongidx);
-  loadSong(songs[currentSongidx]);
-  playMusic();
+  if (isRandom) {
+    randomPlay();
+  } else {
+    currentSongidx =
+      currentSongidx <= 0
+        ? (currentSongidx = songs.length - 1)
+        : (currentSongidx - 1) % songs.length;
+    localStorage.setItem("currentSongIndex", currentSongidx);
+    loadSong(songs[currentSongidx]);
+    playMusic();
+  }
 }
 
 function randomPlay() {
@@ -110,6 +119,7 @@ function randomPlay() {
   localStorage.setItem("currentSongIndex", currentSongidx);
   loadSong(songs[currentSongidx]);
   playMusic();
+  console.log("random playing");
 }
 
 function controlVolume() {
@@ -159,7 +169,6 @@ function calculateXPosition() {
   );
 }
 
-
 loadSong(songs[currentSongidx]);
 
 playBtn.addEventListener("click", () => {
@@ -171,6 +180,16 @@ music.addEventListener("ended", next);
 music.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", controlProgressBar);
 
+// handle random play using JQuery
+$("#random").click(function () {
+  if (!isRandom) {
+    $("#random").css("color", " #d16d6d");
+    isRandom = true;
+  } else {
+    $("#random").css("color", " rgb(129, 129, 129)");
+    isRandom = false;
+  }
+});
 
 // handle draggable point in progress bar using JQuery
 $("#draggable-point").draggable({
