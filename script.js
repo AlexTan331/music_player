@@ -1,7 +1,7 @@
 const image = document.querySelector("img");
 const songName = document.getElementById("song-name");
 const artist = document.getElementById("artist");
-const audio = document.querySelector("audio");
+const music = document.querySelector("audio");
 const progress = document.getElementById("progress");
 const progressContainer = document.getElementById("progress-container");
 const draggablePoint = document.getElementById("draggable-point");
@@ -67,24 +67,24 @@ if (localStorage.getItem("currentSongIndex") !== null) {
   localStorage.setItem("currentSongIndex", currentSongidx);
 }
 
-function playAudio() {
+function playMusic() {
   isPlaying = true;
   playBtn.classList.replace("fa-play", "fa-pause");
   playBtn.setAttribute("title", "Pause");
-  audio.play();
+  music.play();
 }
 
-function pauseAudio() {
+function pauseMusic() {
   isPlaying = false;
   playBtn.classList.replace("fa-pause", "fa-play");
   playBtn.setAttribute("title", "Play");
-  audio.pause();
+  music.pause();
 }
 
 function loadSong(song) {
   artist.textContent = song.artist;
   songName.textContent = song.displayName;
-  audio.src = `music/${song.name}.mp3`;
+  music.src = `music/${song.name}.mp3`;
   image.src = `img/${song.name}.jpg`;
 }
 
@@ -92,7 +92,7 @@ function next() {
   currentSongidx = (currentSongidx + 1) % songs.length;
   localStorage.setItem("currentSongIndex", currentSongidx);
   loadSong(songs[currentSongidx]);
-  playAudio();
+  playMusic();
 }
 
 function previous() {
@@ -102,12 +102,14 @@ function previous() {
       : (currentSongidx - 1) % songs.length;
   localStorage.setItem("currentSongIndex", currentSongidx);
   loadSong(songs[currentSongidx]);
-  playAudio();
+  playMusic();
 }
 
 function randomPlay() {
-  //play songs randomly
-  //to be implemented...
+  currentSongidx = Math.floor(Math.random() * songs.length);
+  localStorage.setItem("currentSongIndex", currentSongidx);
+  loadSong(songs[currentSongidx]);
+  playMusic();
 }
 
 function controlVolume() {
@@ -145,8 +147,8 @@ function updateProgressBar(e) {
 function controlProgressBar(e) {
   const width = this.clientWidth;
   const positionX = e.offsetX;
-  const { duration } = audio;
-  audio.currentTime = (positionX / width) * duration;
+  const { duration } = music;
+  music.currentTime = (positionX / width) * duration;
 }
 
 function calculateXPosition() {
@@ -161,12 +163,12 @@ function calculateXPosition() {
 loadSong(songs[currentSongidx]);
 
 playBtn.addEventListener("click", () => {
-  isPlaying ? pauseAudio() : playAudio();
+  isPlaying ? pauseMusic() : playMusic();
 });
 prevBtn.addEventListener("click", previous);
 nxtBtn.addEventListener("click", next);
-audio.addEventListener("ended", next);
-audio.addEventListener("timeupdate", updateProgressBar);
+music.addEventListener("ended", next);
+music.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", controlProgressBar);
 
 
@@ -190,12 +192,12 @@ $("#draggable-point").draggable({
 
   start: function () {
     isPrevPlaying = isPlaying;
-    pauseAudio();
+    pauseMusic();
   },
 
   stop: function () {
-    if (isPrevPlaying) playAudio();
-    else pauseAudio();
+    if (isPrevPlaying) playMusic();
+    else pauseMusic();
 
     //current x position of draggable point
     var xPos =
@@ -203,7 +205,7 @@ $("#draggable-point").draggable({
         parseFloat($(this).parent().css("width")) +
       "%";
 
-    //update current audio time
-    audio.currentTime = (Math.floor(parseFloat(xPos)) / 100) * audio.duration;
+    //update current music time
+    music.currentTime = (Math.floor(parseFloat(xPos)) / 100) * music.duration;
   },
 });
