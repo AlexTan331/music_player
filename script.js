@@ -4,12 +4,16 @@ const artist = document.getElementById("artist");
 const audio = document.querySelector("audio");
 const progress = document.getElementById("progress");
 const progressContainer = document.getElementById("progress-container");
+const draggablePoint = document.getElementById("draggable-point");
 const currentTimeEl = document.getElementById("current-time");
 const durationEl = document.getElementById("duration");
 const prevBtn = document.getElementById("prev");
 const nxtBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
 
+let isPrevPlaying;
+
+const div = document.querySelector("div");
 // Music
 const songs = [
   {
@@ -41,7 +45,7 @@ const songs = [
     name: "Toss-the-Salt",
     displayName: "Toss the Salt (Instrumental)",
     artist: "Sionya",
-  },  
+  },
   {
     name: "Young",
     displayName: "Yong",
@@ -93,25 +97,22 @@ function previous() {
   playAudio();
 }
 
-
 function randomPlay() {
-    //play songs randomly
-    //to be implemented...
+  //play songs randomly
+  //to be implemented...
 }
 
 function controlVolume() {
-    //adjust volume
-    //to be implemented...
+  //adjust volume
+  //to be implemented...
 }
-
-
 
 function updateProgressBar(e) {
   const { duration, currentTime } = e.srcElement;
-
   // update progress bar width
   const progressPercent = (currentTime / duration) * 100;
   progress.style.width = `${progressPercent}%`;
+  draggablePoint.style.left = `${progressPercent - 1}%`;
 
   // refactor time format for duration
   const durationMinutes = Math.floor(duration / 60);
@@ -131,10 +132,6 @@ function updateProgressBar(e) {
     currentSeconds = `0${currentSeconds}`;
   }
   currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
-
-
-  //draggable progress bar
-  //to be implemented...
 }
 
 function controlProgressBar(e) {
@@ -142,7 +139,10 @@ function controlProgressBar(e) {
   const positionX = e.offsetX;
   const { duration } = audio;
   audio.currentTime = (positionX / width) * duration;
+
+  console.log("controlProgressBar: ", width, " ", positionX);
 }
+
 
 loadSong(songs[currentSongidx]);
 
@@ -154,3 +154,40 @@ nxtBtn.addEventListener("click", next);
 audio.addEventListener("ended", next);
 audio.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", controlProgressBar);
+
+
+// handle draggable point in progress bar using JQuery
+$("#draggable-point").draggable({
+  axis: "x",
+  containment: "#progress-container",
+});
+
+$("#draggable-point").draggable({
+  // update progress bar
+  drag: function () {
+    var xPos =
+      (100 * (parseFloat($(this).css("left")) + 10)) /
+        parseFloat($(this).parent().css("width")) +
+      "%";
+    $("#progress").css({
+      width: xPos,
+    });
+  },
+
+  start: function () {
+    isPrevPlaying = isPlaying;
+    pauseAudio();
+  },
+  // play or pause audio, and update current audio time 
+  stop: function () {
+    if (isPrevPlaying) playAudio();
+    else pauseAudio();
+
+    var xPos =
+      (100 * (parseFloat($(this).css("left")) + 10)) /
+        parseFloat($(this).parent().css("width")) +
+      "%";
+    const { duration } = audio;
+    audio.currentTime = (Math.floor(parseFloat(xPos)) / 100) * duration;
+  },
+});

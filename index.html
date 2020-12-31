@@ -1,43 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Music Player</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  </head>
+  <body>
     <div class="player-container">
-        <!-- Song Section-->
-        <div class="img-container">
-            <img src="/img/jacinto-1.jpg" alt="Album">
-            <h2 id="song-name">Song name</h2>
-            <h3 id="artist">Artist</h3>
-            <audio src="music/jacinto-1.mp3"></audio>
+      <!-- Song Section-->
+      <div class="img-container">
+        <img src="/img/jacinto-1.jpg" alt="Album" />
+        <h2 id="song-name">Song name</h2>
+        <h3 id="artist">Artist</h3>
+        <audio src="music/jacinto-1.mp3"></audio>
+      </div>
+
+      <!-- Progress Bar Section -->
+      <div class="progress-container" id="progress-container">
+        <!-- draggable point -->
+        <div id="draggable-point" class="draggable ui-widget-content">
+          <div class="draggable" id="audio-progress-handle"></div>
         </div>
-        <!-- Progress Bar Section -->
-        <div class="progress-container" id="progress-container">
-            <div class="progress" id="progress"></div>
-            <div class="duration-wrapper">
-                <span id="current-time">0:00</span>
-                <span id="duration">2:06</span>
-            </div>
-        </div>  
-        <!-- Controls Section -->
-        <div class="player-control">
-
-            <i class="fas fa-backward" id="prev" title="Previous"></i>
-            <i class="fas fa-play main-button" id="play" title="Play"></i>
-            <i class="fas fa-forward" id="next" title="Next"></i>
-
-
-        </div>
+        <!-- bar -->
+        <div class="progress" id="progress"></div>
+      </div>
+      <!-- duration -->
+      <div class="duration-wrapper">
+        <span id="current-time">0:00</span>
+        <span id="duration">2:06</span>
+      </div>
+      <!-- Controls Section -->
+      <div class="player-control">
+        <i class="fas fa-backward" id="prev" title="Previous"></i>
+        <i class="fas fa-play main-button" id="play" title="Play"></i>
+        <i class="fas fa-forward" id="next" title="Next"></i>
+      </div>
     </div>
-
 
     <!-- Script -->
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
