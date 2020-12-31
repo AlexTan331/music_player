@@ -62,6 +62,43 @@ h3 {
   width: 90%;
 }
 
+.volume-container {
+  background:rgb(129, 129, 129);
+  height: 10px;
+  margin-top: 10px;
+  width: 60px;
+  border-radius: 10px;
+  position: relative;
+  left: 65%;
+}
+
+.volume-bar {
+  background: #d16d6d;
+  border-radius: 10px;
+  height: 100%;
+  width: 20%;
+}
+
+#volume-progress-handle {
+  position: absolute;
+  z-index: 1;
+  margin-top: 0px;
+  width: 10px;
+  height: 10px;
+  border-top-color: #d3d5df;
+  border-right-color: #d3d5df;
+  border-radius: 100%;
+  background-color: rgb(221, 146, 202);
+  cursor: pointer;
+  left: 0%;
+
+}
+
+#volume-progress-handle:hover {
+  width: 13px;
+  height: 13px;
+}
+
 #audio-progress-handle {
   display: block;
   position: absolute;
@@ -160,7 +197,7 @@ h3 {
   }
 
   .player-control {
-    top: -10px;
-    left: 100px;
+    top: -100px;
+    left: 10px;
   }
 }
