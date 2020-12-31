@@ -11,6 +11,9 @@ const prevBtn = document.getElementById("prev");
 const nxtBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
 const volume = document.getElementById("volume");
+const volumeContainer = document.getElementById("volume-container");
+const volumeBar = document.getElementById("volume-bar");
+const draggablePointVolume = document.getElementById("draggable-point-volume");
 
 // Music
 const songs = [
@@ -120,39 +123,32 @@ function randomPlay() {
   localStorage.setItem("currentSongIndex", currentSongidx);
   loadSong(songs[currentSongidx]);
   playMusic();
-  console.log("random playing");
 }
 
-function toggleMuteMusic() {
-  if (music.muted) {
-    music.muted = false;
-    volume.classList.replace("fa-volume-mute", "fa-volume-up");
-    volume.setAttribute("title", "Volume: On");
-  } else {
-    music.muted = true;
-    volume.classList.replace("fa-volume-up", "fa-volume-mute");
-    volume.setAttribute("title", "Volume: Off");
-  }
+function changeVolumeStyle(prevIcon, curIcon, onOrOff, widthPercent, leftPercent) {
+  volume.classList.replace(`fa-volume-${prevIcon}`, `fa-volume-${curIcon}`);
+  volume.setAttribute("title", `Volume: ${onOrOff}`);
+  volumeBar.style.width = widthPercent;
+  draggablePointVolume.style.left = leftPercent;
 }
 
-function controlVolume() {
-  //adjust volume
-  //to be implemented...
-
-  // if hover over
-  // show volume bar
-  // hover out 
-  // hide volume bar
+function muteMusic() {
+  music.muted = true;
+  changeVolumeStyle("up", "mute", "off", "0%", "0%");
 }
 
-function showVolume(x) {
-
-  console.log("show");
+function unmuteMusic() {
+  music.muted = false;
+  changeVolumeStyle("mute", "up", "on", "100%", "90%");
 }
 
-function hideVolume(x) {
-
-  console.log("hide");
+function controlVolume(e) {
+  const width = this.clientWidth;
+  const positionX = e.offsetX;
+  music.volume = parseFloat(positionX) / parseFloat(width);
+  const volumePercent = (positionX / width) * 100;
+  volumeBar.style.width = `${volumePercent}%`;
+  draggablePointVolume.style.left = `${volumePercent - 10}%`;
 }
 
 function updateProgressBar(e) {
@@ -189,13 +185,6 @@ function controlProgressBar(e) {
   music.currentTime = (positionX / width) * duration;
 }
 
-function calculateXPosition() {
-  return (
-    (100 * (parseFloat($(this).css("left")) + 10)) /
-      parseFloat($(this).parent().css("width")) +
-    "%"
-  );
-}
 
 loadSong(songs[currentSongidx]);
 
@@ -207,7 +196,8 @@ nxtBtn.addEventListener("click", next);
 music.addEventListener("ended", next);
 music.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", controlProgressBar);
-volume.addEventListener("click", toggleMuteMusic);
+volume.addEventListener("click",() => {music.muted ? unmuteMusic(): muteMusic() } );
+volumeContainer.addEventListener("click", controlVolume);
 
 // handle random play using JQuery
 $("#random").click(function () {
@@ -255,5 +245,26 @@ $("#draggable-point").draggable({
 
     //update current music time
     music.currentTime = (Math.floor(parseFloat(xPos)) / 100) * music.duration;
+  },
+});
+
+// handle volume control using JQuery
+$("#draggable-point-volume").draggable({
+  axis: "x",
+  containment: "#volume-container",
+});
+
+$("#draggable-point-volume").draggable({
+  drag: function () {
+    var xPos =
+      (100 * parseFloat($(this).css("left"))) /
+        parseFloat($(this).parent().css("width")) +
+      "%";
+    $("#volume-bar").css({
+      width: xPos,
+    });
+
+    if (parseFloat(xPos) / 100 < 0) toggleMuteMusic();
+    else music.volume = parseFloat(xPos) / 100;
   },
 });

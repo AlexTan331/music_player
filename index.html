@@ -43,20 +43,13 @@
         <i class="fas fa-backward" id="prev" title="Previous"></i>
         <i class="fas fa-play main-button" id="play" title="Play"></i>
         <i class="fas fa-forward" id="next" title="Next"></i>
-        <i
-          class="fas fa-volume-up"
-          id="volume"
-          title="Volume: On"
-          onmouseover="document.getElementById('volume-container').style.display = 'block';"
-        >
-        </i>
-        <div
-          class="volume-container"
-          id="volume-container"
-          style="display: none"
-          onmouseleave="document.getElementById('volume-container').style.display = 'none';"
-        >
-          <div id="draggable-point-volume" class="draggable ui-widget-content">
+        <i class="fas fa-volume-up" id="volume" title="Volume: On"> </i>
+        <div class="volume-container" id="volume-container">
+          <div
+            id="draggable-point-volume"
+            class="draggable ui-widget-content"
+            style="left: 90%"
+          >
             <div class="draggable" id="volume-progress-handle"></div>
           </div>
           <div class="volume-bar" id="volume-bar"></div>
