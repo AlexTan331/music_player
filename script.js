@@ -11,9 +11,6 @@ const prevBtn = document.getElementById("prev");
 const nxtBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
 
-let isPrevPlaying;
-
-const div = document.querySelector("div");
 // Music
 const songs = [
   {
@@ -59,7 +56,16 @@ const songs = [
 ];
 
 let isPlaying = false;
-let currentSongidx = 0;
+let isPrevPlaying;
+
+let currentSongidx;
+// get currentSongIdx from cache
+if (localStorage.getItem("currentSongIndex") !== null) {
+  currentSongidx = localStorage.getItem("currentSongIndex");
+} else {
+  currentSongidx = 0;
+  localStorage.setItem("currentSongIndex", currentSongidx);
+}
 
 function playAudio() {
   isPlaying = true;
@@ -84,6 +90,7 @@ function loadSong(song) {
 
 function next() {
   currentSongidx = (currentSongidx + 1) % songs.length;
+  localStorage.setItem("currentSongIndex", currentSongidx);
   loadSong(songs[currentSongidx]);
   playAudio();
 }
@@ -93,6 +100,7 @@ function previous() {
     currentSongidx <= 0
       ? (currentSongidx = songs.length - 1)
       : (currentSongidx - 1) % songs.length;
+  localStorage.setItem("currentSongIndex", currentSongidx);
   loadSong(songs[currentSongidx]);
   playAudio();
 }
@@ -139,8 +147,14 @@ function controlProgressBar(e) {
   const positionX = e.offsetX;
   const { duration } = audio;
   audio.currentTime = (positionX / width) * duration;
+}
 
-  console.log("controlProgressBar: ", width, " ", positionX);
+function calculateXPosition() {
+  return (
+    (100 * (parseFloat($(this).css("left")) + 10)) /
+      parseFloat($(this).parent().css("width")) +
+    "%"
+  );
 }
 
 
@@ -178,16 +192,18 @@ $("#draggable-point").draggable({
     isPrevPlaying = isPlaying;
     pauseAudio();
   },
-  // play or pause audio, and update current audio time 
+
   stop: function () {
     if (isPrevPlaying) playAudio();
     else pauseAudio();
 
+    //current x position of draggable point
     var xPos =
       (100 * (parseFloat($(this).css("left")) + 10)) /
         parseFloat($(this).parent().css("width")) +
       "%";
-    const { duration } = audio;
-    audio.currentTime = (Math.floor(parseFloat(xPos)) / 100) * duration;
+
+    //update current audio time
+    audio.currentTime = (Math.floor(parseFloat(xPos)) / 100) * audio.duration;
   },
 });
