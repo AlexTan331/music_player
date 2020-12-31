@@ -10,6 +10,7 @@ const durationEl = document.getElementById("duration");
 const prevBtn = document.getElementById("prev");
 const nxtBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
+const volume = document.getElementById("volume");
 
 // Music
 const songs = [
@@ -122,9 +123,36 @@ function randomPlay() {
   console.log("random playing");
 }
 
+function toggleMuteMusic() {
+  if (music.muted) {
+    music.muted = false;
+    volume.classList.replace("fa-volume-mute", "fa-volume-up");
+    volume.setAttribute("title", "Volume: On");
+  } else {
+    music.muted = true;
+    volume.classList.replace("fa-volume-up", "fa-volume-mute");
+    volume.setAttribute("title", "Volume: Off");
+  }
+}
+
 function controlVolume() {
   //adjust volume
   //to be implemented...
+
+  // if hover over
+  // show volume bar
+  // hover out 
+  // hide volume bar
+}
+
+function showVolume(x) {
+
+  console.log("show");
+}
+
+function hideVolume(x) {
+
+  console.log("hide");
 }
 
 function updateProgressBar(e) {
@@ -179,6 +207,7 @@ nxtBtn.addEventListener("click", next);
 music.addEventListener("ended", next);
 music.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", controlProgressBar);
+volume.addEventListener("click", toggleMuteMusic);
 
 // handle random play using JQuery
 $("#random").click(function () {

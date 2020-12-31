@@ -107,15 +107,14 @@ h3 {
 .player-control {
   position: relative;
   top: -100px;
-  left: 20px;
-  width: 400px;
+  left: 30px;
+  width: 450px;
 }
 
 .fas {
-  font-size: 30px;
+  font-size: 25px;
   color: rgb(129, 129, 129);
-  margin-right: 15px;
-  margin-left: 15px;
+  margin: 0 15px 0 15px;
   user-select: none;
 }
 
@@ -125,20 +124,19 @@ h3 {
 }
 
 #random {
-  font-size: 30px;
   color: rgb(129, 129, 129);
   user-select: none;
-  margin-left: 20px;
+  margin: 0 45px 0 5px;
 }
 
 #volume {
-  font-size: 30px;
   color: rgb(129, 129, 129);
   user-select: none;
+  margin-left: 30px;
 }
 
 .main-button {
-  font-size: 40px;
+  font-size: 30px;
   position: relative;
   top: 3px;
 }
