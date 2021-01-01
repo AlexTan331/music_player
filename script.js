@@ -59,9 +59,11 @@ const songs = [
   },
 ];
 
+//store previous volume and set it as current volume after changed from muted 
+let prevVolume = 100; 
 let isRandom = false;
 let isPlaying = false;
-let isPrevPlaying;
+let isPrevPlaying;  
 
 let currentSongidx;
 // get currentSongIdx from cache
@@ -139,7 +141,7 @@ function muteMusic() {
 
 function unmuteMusic() {
   music.muted = false;
-  changeVolumeStyle("mute", "up", "on", "100%", "90%");
+  changeVolumeStyle("mute", "up", "on", `${prevVolume}%`, `${prevVolume - 10}%`);
 }
 
 function controlVolume(e) {
@@ -149,6 +151,7 @@ function controlVolume(e) {
   const volumePercent = (positionX / width) * 100;
   volumeBar.style.width = `${volumePercent}%`;
   draggablePointVolume.style.left = `${volumePercent - 10}%`;
+  prevVolume = volumePercent;
 }
 
 function updateProgressBar(e) {
